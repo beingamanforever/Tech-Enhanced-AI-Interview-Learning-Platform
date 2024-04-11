@@ -61,6 +61,11 @@ Base Model Taken for training was [Mistral-7b-Instruct-V02](akshatshaw/mistral-i
   </code>
 </pre>
 
+*Challenges with Scores:*
+
+- Lack of dataset quantity limits the reproducibility of the fine tuned model to same length and context as the evaluation dataset
+- Lesser epoch for training due to lesser GPU access on Kaggle and other GPU enabled notebooks
+
 ## Clone the repository:
 <pre>
   <code class="python">
