@@ -4,16 +4,19 @@
 
 The Chatbot Interviewer is a conversational AI system designed to engage in natural language interactions with users, simulating the experience of an interview. The chatbot is powered by the Mistral language model, which has been fine-tuned to provide relevant and engaging questions based on the user's responses. The model also gives basic corrections in the grammers of the Candidate using Fine Tuned Mistral.
 
+![Pipeline_Flowchart](https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform/blob/main/Techshila%202024.png)
+
 ## Table of Contents
+
 - Introduction
 - Features
+- Dataset and Model
 - Installation
 - Usage
 - Customization
 - Contributing
 - License
-- Introduction
-
+  
 
 ## Features
 Seamless conversation flow with the user
@@ -24,12 +27,37 @@ Integration with various platforms (e.g., web, mobile, messaging apps)
 Installation
 To set up the Chatbot Interviewer, follow these steps:
 
+## Dataset Collection and Model Fine-Tuning
+
+The datasets are stored on Huggingface Hub [HF_Dataset](AgamP/techshila_ml) and Github Repo dataset [Refer this](https://github.com/OmdenaAI/omdena-hyderabad-Chatbot-for-interview.git)
+
+The synthetic data generated were done using prompts given to ChatGPT as .csv files, which was then pushed to HF. This is the format of the training dataset.
+<pre>
+  <code>
+DatasetDict
+    ({
+    train: Dataset
+    ({
+        features: ['Job_Position', 'Question', 'Answer', 'Interview Phase', 'Answer Quality', 'Job Position'],
+        num_rows: 1742
+    })
+    test: Dataset({
+        features: ['Job_Position', 'Question', 'Answer', 'Interview Phase', 'Answer Quality', 'Job Position'],
+        num_rows: 581
+    })
+})
+  </code>
+</pre> 
+
+Base Model Taken for training was [Mistral-7b-Instruct-V02](akshatshaw/mistral-interview-finetune) which was *fine tuned on custom dataset using QLora with 50 epochs.*
+
 ## Clone the repository:
 <pre>
   <code class="python">
 git clone https://github.com/your-username/chatbot-interviewer.git
   </code>
 </pre>
+
 ## Install the required dependencies:
 <pre>
   <code class="python">
@@ -71,6 +99,3 @@ We welcome contributions to the Chatbot Interviewer project. If you'd like to co
 - Make your changes and commit them
 - Push your changes to your forked repository
 - Submit a pull request
-
-## License
-This project is licensed under the MIT License.
