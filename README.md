@@ -1,13 +1,15 @@
 # Tech-Enhanced-AI-Interview-Learning-Platform
 
-## Techshila Chatbot Interviewer 
+## Chatbot Interviewer 
 
 The Chatbot Interviewer is a conversational AI system designed to engage in natural language interactions with users, simulating the experience of an interview. The chatbot is powered by the Mistral language model, which has been fine-tuned to provide relevant and engaging questions based on the user's responses. The model also gives basic corrections in the grammers of the Candidate using Fine Tuned Mistral.
 
 ## Project Pipeline Diagram  :open_file_folder:
-The pipeline diagram of the whole project, can be glanced at [here](https://www.figma.com/file/W9jITgwibMiuyctGrFvMmA/Techshila-2024?type=whiteboard&node-id=0%3A1&t=BuFpFkRdg49CU8vH-1) , for the pdf version [click here](https://drive.google.com/file/d/1qedcxfMOqoqeLeiodIBy9gVwta--fIry/view?usp=drive_link)
 
 ![Pipeline_Flowchart](https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform/blob/main/Techshila%202024.png)
+
+>[!TIP]
+> The pipeline diagram of the whole project, can be glanced at [here](https://www.figma.com/file/W9jITgwibMiuyctGrFvMmA/Techshila-2024?type=whiteboard&node-id=0%3A1&t=BuFpFkRdg49CU8vH-1) , for the pdf version [click here](https://drive.google.com/file/d/1qedcxfMOqoqeLeiodIBy9gVwta--fIry/view?usp=drive_link)
 
 ## Table of Contents :bar_chart:
 
@@ -111,7 +113,9 @@ df.to_csv('data.csv', index=False)
 - Data Splitting: Splitted the dataset into two parts train and test with a split percentage of 80% for training, 10% for validation, and 10% for testing.
 ### Fine-Tuning the Model — The Crux
 We did fine-tuning the [Mistral 7B model](https://www.kdnuggets.com/mistral-7b-v02-fine-tuning-mistral-new-open-source-llm-with-hugging-face) using the [QLoRA](https://github.com/artidoro/qlora) (Quantization and LoRA) method. This approach combines quantization and [LoRA adapters](https://docs.vllm.ai/en/latest/models/lora.html) to improve the model’s performance. We used the [PEFT](https://huggingface.co/blog/peft) library from [Hugging Face](https://huggingface.co/) to facilitate the fine-tuning process. 
-- Loading the dependencies: You only have to run this once per machine
+- Loading the dependencies:
+>[!NOTE]
+> You only have to run this once per machine
 ````python
 !pip install -q -U bitsandbytes
 !pip install -q -U git+https://github.com/huggingface/transformers.git
@@ -184,7 +188,8 @@ def generate_and_tokenize_prompt(df):
     """
     return tokenize(full_prompt)
 ```
-After this we splitted the combined dataset and the uploaded it on hugging-face, and then mapped our prompt to the dataset for the fine tuning of the model, so as to increase the efficiency.
+>[!TIP]
+> After this we splitted the combined dataset and the uploaded it on hugging-face, and then mapped our prompt to the dataset for the fine tuning of the model, so as to increase the efficiency.
 ```python
 from datasets import load_dataset
 
@@ -198,7 +203,8 @@ tokenized_val_dataset = dataset['test'].map(generate_and_tokenize_prompt)
 - Trainable parameters & Fine Tuning Loop: Set the training loop for the model to fine tune, after which the model would be outputting the evaluation prompt.
   
 ![image](https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform/assets/121532863/902bed7d-992e-4bc6-ab6e-360fdf2be56f)
-Model Training parameter graphs can be accessed [here](https://wandb.ai/akshatshaw-iitr/huggingface/reports/FineTuning-mistral-model--Vmlldzo3NDk2ODQ3?accessToken=sp6lqo5qjh405qm3zuo1jhr2wnmdqqvaj03ejxyz4txoj8pweileedlh3kxk33vm)
+>[!NOTE]
+> Model Training parameter graphs can be accessed [here](https://wandb.ai/akshatshaw-iitr/huggingface/reports/FineTuning-mistral-model--Vmlldzo3NDk2ODQ3?accessToken=sp6lqo5qjh405qm3zuo1jhr2wnmdqqvaj03ejxyz4txoj8pweileedlh3kxk33vm)
 ```python
 # Now, we prepare the model for fine-tuning by applying LoRA adapters to the model
 def print_trainable_parameters(model):
@@ -213,11 +219,14 @@ def print_trainable_parameters(model):
         f"trainable params: {trainable_params} || all params: {all_param} || trainable%: {100 * (trainable_params / all_param)}"
     )
 ```
-Reference about usage of [peft](https://docs.nvidia.com/nemo-framework/user-guide/latest/nemotoolkit/nlp/nemo_megatron/peft/landing_page.html) from [LoRA’s ](https://arxiv.org/pdf/2106.09685.pdf)paper here here After training, you can use the fine-tuned model for inference. You’ll need to load the base Mistral model from the Huggingface Hub and then load the [QLoRA adapters](https://github.com/artidoro/qlora/blob/main/README.md) from the best-performing checkpoint directory.
+>[!TIP]
+> Reference about usage of [peft](https://docs.nvidia.com/nemo-framework/user-guide/latest/nemotoolkit/nlp/nemo_megatron/peft/landing_page.html) from [LoRA’s ](https://arxiv.org/pdf/2106.09685.pdf)paper here here After training, you can use the fine-tuned model for inference. You’ll need to load the base Mistral model from the Huggingface Hub and then load the [QLoRA adapters](https://github.com/artidoro/qlora/blob/main/README.md) from the best-performing checkpoint directory.
+
 ### Model Evaluation
 [BLeU score](https://en.wikipedia.org/wiki/BLEU) (Bi-Lingual Evaluation Understudy) is a metric for automatically evaluating machine- translated text. The BLEU score is a number between zero and one that measures the similarity of the machine-translated text to a set of high quality reference translations.
 
 ![image](https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform/assets/121532863/22706b3f-f4bf-42dc-ba6f-3068f4ff49fb)
+
 # Deployment :clapper:
 We uploaded our training datasets and Fine Tuned Mistral-LLM (mistralai/Mistral-7B-Instruct-v0.2) using Quantized-LoRA to hugging-face.
 ## Frontend
@@ -234,7 +243,8 @@ Tech-Stack used - Javascript / Flask
 - Then we read this file using faster-wisper and then convert it into text.
 - We then feed this text into our fine tuned mistral model, which then asks the user questions based on the domain selected by the user.
 - Our model also corrects the grammatical errors present in the text prompted by the user.
-- Model then outputs a desired answer based on the previous inputs given by the user and the
+- Model then outputs a desired answer based on the previous inputs given by the user and the context
+  
 # Hyperparameters
 These are the list of Hyperparameters involved and how they were tuned:
 - n-bits quantisation: we used 4-bit quantisation to speed up the process, and make our model light as it reduces the precision of the weights and biases involved in the model. For more info [click here](https://arxiv.org/pdf/2106.09685.pdf).
@@ -315,10 +325,7 @@ python fine_tune_model.py
   </code>
 </pre>
 
-## Usage 
-To use the Chatbot Interviewer, simply interact with the chatbot through the provided interface. The chatbot will ask relevant questions based on the user's responses, simulating a natural interview experience of the selected domain. 
-
-## Customization 🎮 :video_game:
+## Customization :video_game:
 You can customize the Chatbot Interviewer by modifying the following:
 
 - Question templates: Adjust the pre-defined question templates to suit your specific needs.
@@ -328,7 +335,9 @@ You can customize the Chatbot Interviewer by modifying the following:
 
 
 ## Contributing :open_hands:
-We welcome contributions to the Chatbot Interviewer project. If you'd like to contribute, please follow these steps:
+We welcome contributions to the Chatbot Interviewer project. 
+>[!NOTE]
+> If you'd like to contribute, please follow these steps:
 
 - Fork the repository
 - Create a new branch for your feature or bug fix
@@ -337,4 +346,4 @@ We welcome contributions to the Chatbot Interviewer project. If you'd like to co
 - Submit a pull request
   
 ## Contributers :rocket:
-[Agam Pandey](https://github.com/AGAMPANDEYY), [Akshat Shaw](https://github.com/akshatshaw), [Aman Behera](https://github.com/beingamanforever), [Kushagra Singh](https://github.com/git-kush), [Vaibhav Prajapati](https://github.com/vaibhavprajapati-22), [Vishnu jain](https://github.com/Vishnuujain).
+[Agam Pandey](https://github.com/AGAMPANDEYY) , [Akshat Shaw](https://github.com/akshatshaw) , [Aman Behera](https://github.com/beingamanforever) , [Kushagra Singh](https://github.com/git-kush) , [Vaibhav Prajapati](https://github.com/vaibhavprajapati-22) , [Vishnu jain](https://github.com/Vishnuujain)
