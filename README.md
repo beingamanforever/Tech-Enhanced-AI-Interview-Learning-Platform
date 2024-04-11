@@ -30,7 +30,6 @@ To set up the Chatbot Interviewer, follow these steps:
 ## Dataset Collection and Model Fine-Tuning
 
 The datasets are stored on Huggingface Hub [HF_Dataset](AgamP/techshila_ml) and Github Repo dataset [Refer this](https://github.com/OmdenaAI/omdena-hyderabad-Chatbot-for-interview.git)
-
 The synthetic data generated were done using prompts given to ChatGPT as .csv files, which was then pushed to HF. This is the format of the training dataset.
 <pre>
   <code>
@@ -49,7 +48,8 @@ DatasetDict
   </code>
 </pre> 
 
-Base Model Taken for training was [Mistral-7b-Instruct-V02](akshatshaw/mistral-interview-finetune) which was *fine tuned on custom dataset using QLora with 50 epochs.*
+Base Model Taken for training was [Mistral-7b-Instruct-V02](akshatshaw/mistral-interview-finetune) which was *fine tuned on custom dataset using QLora with 50 epochs.* 
+[Refer this for WanB report](https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform/blob/main/FineTuning%20mistral%20model%20_%20huggingface%20%E2%80%93%20Weights%20%26%20Biases.pdf))
 
 ## Clone the repository:
 <pre>
