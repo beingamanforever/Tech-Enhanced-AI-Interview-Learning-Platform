@@ -9,7 +9,7 @@ model_audio = WhisperModel(model_size_or_path="small")
 # genai.configure(api_key=api_key)
 # model = genai.GenerativeModel('gemini-pro')
 
-app = Flask(__name__)
+app = Flask(_name_)
 name = []
 position = []
 prev_q = []
@@ -90,7 +90,7 @@ def get_Chat_response(text):
   question : Hello, Tell me about yourself.
   Answer : {text}
   Please formulate a thoughtful follow-up question to probe deeper into the candidate's understanding and experience of the candidate's response in relation to the desired skills and knowledge for the {position[0]} role.
-  Keep the response precise.
+  Keep the response precise. Don't use the word "Great" and be strict.
   output:
   """
         flag += 1
@@ -102,7 +102,7 @@ def get_Chat_response(text):
   The candidate has responded as follows:
   {text}
   Please formulate a thoughtful follow-up question to probe deeper into the candidate's understanding and experience of the candidate's response in relation to the desired skills and knowledge for the {position[0]} role.
-   Keep the response precise.
+   Keep the response precise. Don't use the word "Great" and be strict.
   output:
   """
         flag += 1
@@ -161,5 +161,5 @@ def answer_checker(text,question):
     print(output.split("Rating:")[-1])
     return output
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     app.run()
