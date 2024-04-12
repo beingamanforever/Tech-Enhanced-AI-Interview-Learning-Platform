@@ -1,0 +1,32 @@
+body,html{
+	height: 100%;
+	margin: 0;
+	background: rgb(44, 47, 59);
+   background: -webkit-linear-gradient(to right, rgb(40, 59, 34), rgb(54, 60, 70), rgb(32, 32, 43));
+	background: linear-gradient(to right, rgb(38, 51, 61), rgb(50, 55, 65), rgb(33, 33, 78));
+}
+.chat{
+	margin-top: auto;
+	margin-bottom: auto;
+    margin-left: auto;
+    margin-right: 250px;
+    align-items: center;
+}
+.card{
+    align-items: center;
+	height: 250px;
+    width: 500px;
+	border-radius: 15px !important;
+	background-color: rgba(0,0,0,0.4) !important;
+}
+.b1
+{
+    margin-top: 20px;
+}
+#but {
+    display: block;
+    margin-left: 70px;
+}
+.form-group{
+    color: white;
+}

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>InterviewIQ.ai</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}"/>
+	</head>
+	
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row justify-content-center h-100">		
+				<div class="col-md-8 col-xl-6 chat">
+					<div class="card">
+						<div class="card-header msg_head">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="../static/images/interviewer.png" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>Interviewer</span>
+								</div>
+							</div>
+						</div>
+						<div id="messageFormeight" class="card-body msg_card_body">
+							
+							
+						</div>
+						<div class="card-footer">
+							<form id="messageArea" class="input-group">
+								<div class="input-group-append">
+									<button type="button" id="microphone" class="input-group-text microphone_btn"><i class="fas fa-microphone"></i></button>
+								</div>
+                                <input type="text" id="text" name="msg" placeholder="Type your message..." autocomplete="off" class="form-control type_msg" required/>
+								<div class="input-group-append">
+									<button type="submit" id="send" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="b3" id="b3">
+			<p>
+				Speaking Pace
+			</p>
+			<p id="res_1">
+			</p>
+		</div>
+
+		<div class="b2" id="b2">
+			<p id="res">
+			</p>
+		</div>
+
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script>
+
+			function update_pace() {
+            fetch('/get_pace')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('res_1').textContent = data.Pace_Checker;
+                })
+                .catch(error => console.error('Error updating flag:', error));
+        }
+			// Call the function initially
+        update_pace();
+
+		setInterval(update_pace, 2000);
+
+			function updateFlag() {
+            fetch('/get_flag')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('res').textContent = data.flag;
+                })
+                .catch(error => console.error('Error updating flag:', error));
+        }
+			// Call the function initially
+        updateFlag();
+
+        // Polling to update flag every 5 seconds (adjust the interval as needed)
+        setInterval(updateFlag, 2000);
+
+
+			 function resizeDiv() {
+            var b2 = document.getElementById('b2');
+            var res = document.getElementById('res');
+            var resWidth = res.offsetWidth;
+            var resHeight = res.offsetHeight;
+            b2.style.height = 20 + resHeight + 'px';
+        }
+		resizeDiv();
+
+        // Listen for changes in text content
+        var observer = new MutationObserver(resizeDiv);
+        var targetNode = document.getElementById('res');
+        var config = { childList: true, subtree: true };
+        observer.observe(targetNode, config);
+
+
+			$(document).ready(function() {
+
+
+				const recordButton = document.getElementById('microphone');
+        let isRecording = false;
+        let audioChunks = [];
+
+        const startRecording = () => {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    const mediaRecorder = new MediaRecorder(stream);
+
+                    mediaRecorder.addEventListener('dataavailable', event => {
+                        audioChunks.push(event.data);
+                    });
+
+                    mediaRecorder.addEventListener('stop', () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const formData = new FormData();
+                        formData.append('audio', audioBlob);
+
+                        fetch('/upload', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => {
+                            console.log('Audio uploaded successfully');
+                        })
+                        .catch(error => {
+                            console.error('Error uploading audio:', error);
+                        });
+
+                        audioChunks = [];
+                    });
+
+                    recordButton.addEventListener('click', () => {
+                        if (isRecording) {
+                            mediaRecorder.stop();
+                            isRecording = false;
+                        } else {
+                            mediaRecorder.start();
+                            isRecording = true;
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error accessing microphone:', error);
+                });
+        };
+
+        startRecording();
+
+		recordButton.addEventListener('click', () => {
+            if (isRecording) {
+                // If recording is stopped, send the audio to the server
+                sendAudio();
+            }
+        });
+
+		function sendAudio() {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const formData = new FormData();
+            formData.append('audio', audioBlob);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log('Audio uploaded successfully');
+                // Once audio is uploaded, fetch the text from the server and set it to the input field
+                fetch('/get_text')
+                .then(response => response.text())
+                .then(text => {
+                    $("#text").val(text);
+                })
+                .catch(error => {
+                    console.error('Error fetching text:', error);
+                });
+            })
+            .catch(error => {
+                console.error('Error uploading audio:', error);
+            });
+
+            audioChunks = [];
+        }
+
+
+				const date = new Date();
+				const hour = date.getHours();
+				const minute = date.getMinutes();
+				const str_time = hour + ":" + minute;
+				var initialMessage = "Hello {{name}}, tell me about yourself.";
+				var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="../static/images/interviewer.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + initialMessage + '<span class="msg_time">' + str_time + '</span></div></div>';
+				$("#messageFormeight").append($.parseHTML(botHtml));
+
+
+				$("#messageArea").on("submit", function(event) {
+					const date = new Date();
+					const hour = date.getHours();
+					const minute = date.getMinutes();
+					const str_time = hour+":"+minute;
+					var rawText = $("#text").val();
+
+					var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + rawText + '<span class="msg_time_send">'+ str_time + '</span></div><div class="img_cont_msg"><img src="https://i.ibb.co/d5b84Xw/Untitled-design.png" class="rounded-circle user_img_msg"></div></div>';
+
+					$("#text").val("");
+					$("#messageFormeight").append(userHtml);
+
+					$.ajax({
+						data: {
+							msg: rawText,
+						},
+						type: "POST",
+						url: "/get",
+					}).done(function(data) {
+						var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="../static/images/interviewer.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + data + '<span class="msg_time">' + str_time + '</span></div></div>';
+						$("#messageFormeight").append($.parseHTML(botHtml));
+					});
+					event.preventDefault();
+				});
+			});
+		</script>
+        
+    </body>
+</html>
