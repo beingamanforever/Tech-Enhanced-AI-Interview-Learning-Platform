@@ -342,7 +342,7 @@ python fine_tune_model.py
 
 <pre>
   <code>
-!python app.py
+python app.py
   </code>
 </pre>
 
