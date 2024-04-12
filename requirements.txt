@@ -1,0 +1,8 @@
+flask
+torch
+faster_whisper
+pert
+pyaudio
+transformers
+huggingface_hub
+
