@@ -288,9 +288,6 @@ These are the list of Hyperparameters involved and how they were tuned:
 - Number of Epochs for training of model: We set the number of epochs to be 50, but the eval/loss was plateauing near about 35 epochs. The training paramters graph can be [seen here](https://wandb.ai/akshatshaw-iitr/huggingface/reports/FineTuning-mistral-model--Vmlldzo3NDk2ODQ3?accessToken=sp6lqo5qjh405qm3zuo1jhr2wnmdqqvaj03ejxyz4txoj8pweileedlh3kxk33vm)
 
 
-# Installation
-To set up the Chatbot Interviewer, follow these steps:
-
 ## Dataset Collection and Model Fine-Tuning
 
 The datasets are stored on Huggingface Hub [HF_Dataset](AgamP/techshila_ml) and Github Repo dataset [Refer this](https://github.com/OmdenaAI/omdena-hyderabad-Chatbot-for-interview.git)
@@ -315,6 +312,8 @@ DatasetDict
 Base Model Taken for training was [Mistral-7b-Instruct-V02](akshatshaw/mistral-interview-finetune) which was *fine tuned on custom dataset using QLora with 50 epochs.* 
 [Refer this for WanB report](https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform/blob/main/FineTuning%20mistral%20model%20_%20huggingface%20%E2%80%93%20Weights%20%26%20Biases.pdf))
 
+# Installation
+To set up the Chatbot Interviewer, follow these steps:
 
 ## Clone the repository:
 <pre>
