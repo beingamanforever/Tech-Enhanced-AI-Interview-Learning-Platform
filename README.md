@@ -90,7 +90,8 @@ def get_text():
 ### Preparing Data for Fine tuning
 
 - Data Collection: Collected various datasets (namely SDE-Data, DS-Data, PMConsult data, Combined data)
-- Data Cleaning: Removed noise, corrected errors, and ensuring a uniform format, then combined all these datasets and used it for fine tuning purposes of the LLM.
+- Data Cleaning: Removed noise, dropped columns, corrected errors, and ensuring a uniform format, then combined all these datasets and used it for fine tuning purposes of the LLM.
+- Pushed dataset to Huggingface Hub
 - Loading the Datasets:
 ```python
 import pandas as pd
@@ -227,6 +228,40 @@ def print_trainable_parameters(model):
 
 ![image](https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform/assets/121532863/22706b3f-f4bf-42dc-ba6f-3068f4ff49fb)
 
+## Evaluation Metrics Scores
+
+<pre>
+  <code>
+  BLEU Score: {'bleu': 0.023421683258425006, 'precisions': [0.10455943307928868, 0.030399418366883264, 0.013347545998053482, 0.007093204709887928], 'brevity_penalty': 1.0, 'length_ratio': 4.421083743842365, 'translation_length': 22437, 'reference_length': 5075}
+    
+  Rouge Score:  {'rouge1': 0.1828892019214882, 'rouge2': 0.05595716756740922, 'rougeL': 0.14946545570101497, 'rougeLsum': 0.14924759519559638}
+  </code>
+</pre>
+
+### Mistral 7B Instruct V02 model:
+<pre>
+  <code>
+BLEU Score 0.02 
+Rouge 1-gram Score 0.18
+  </code>
+</pre>
+### Phi2 model: [Refer this repo for FT-Phi2 notebook](https://github.com/AGAMPANDEYY/Techshila_Agam_Notebooks/blob/main/phi-2-peft.ipynb)
+<pre>
+  <code>
+Rouge 1-gram Score 0.38
+Rouge L-gram Score 0.34
+  </code>
+</pre>
+
+Although, the Fine tuned Phi2 model had a good Rouge score compared to Mistral-7B, Phi2 being a SLM couldn't perform well in understanding context and gave unsatisfactory summary and selection-decision of the candidate's interview.
+
+Therefore, the team chose to use Mistral 7B Instruct model. 
+
+*Challenges with Scores:*
+
+- Lack of dataset quantity limits the reproducibility of the fine tuned model to same length and context as the evaluation dataset
+- Lesser epoch for training due to lesser GPU access on Kaggle and other GPU enabled notebooks
+
 # Deployment :clapper:
 We uploaded our training datasets and Fine Tuned Mistral-LLM (mistralai/Mistral-7B-Instruct-v0.2) using Quantized-LoRA to hugging-face.
 ## Frontend
@@ -280,20 +315,6 @@ DatasetDict
 Base Model Taken for training was [Mistral-7b-Instruct-V02](akshatshaw/mistral-interview-finetune) which was *fine tuned on custom dataset using QLora with 50 epochs.* 
 [Refer this for WanB report](https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform/blob/main/FineTuning%20mistral%20model%20_%20huggingface%20%E2%80%93%20Weights%20%26%20Biases.pdf))
 
-## Evaluation Metrics
-
-<pre>
-  <code>
-    BLEU Score: {'rouge1': 0.1828892019214882, 'rouge2': 0.05595716756740922, 'rougeL': 0.14946545570101497, 'rougeLsum': 0.14924759519559638}
-
-    Rouge Score: {'bleu': 0.023421683258425006, 'precisions': [0.10455943307928868, 0.030399418366883264, 0.013347545998053482, 0.007093204709887928], 'brevity_penalty': 1.0, 'length_ratio': 4.421083743842365, 'translation_length': 22437, 'reference_length': 5075}
-  </code>
-</pre>
-
-*Challenges with Scores:*
-
-- Lack of dataset quantity limits the reproducibility of the fine tuned model to same length and context as the evaluation dataset
-- Lesser epoch for training due to lesser GPU access on Kaggle and other GPU enabled notebooks
 
 ## Clone the repository:
 <pre>
