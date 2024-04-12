@@ -6,7 +6,7 @@ from transformers import BitsAndBytesConfig
 
 from huggingface_hub import login
 
-login(token="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")
+login(token="your_hf_api_key")
 
 base_model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 bnb_config = BitsAndBytesConfig(
