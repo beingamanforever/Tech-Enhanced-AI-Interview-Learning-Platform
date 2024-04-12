@@ -5,7 +5,7 @@ from faster_whisper import WhisperModel
 model_audio = WhisperModel(model_size_or_path="small")
 
 # import google.generativeai as genai
-# api_key = "AIzaSyCpnqqgcq0GHVKfIOneC_2qorF2hUM9fZ4"
+# api_key = ""
 # genai.configure(api_key=api_key)
 # model = genai.GenerativeModel('gemini-pro')
 
