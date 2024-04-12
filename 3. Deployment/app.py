@@ -161,5 +161,5 @@ def answer_checker(text,question):
     print(output.split("Rating:")[-1])
     return output
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run()
