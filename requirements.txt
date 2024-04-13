@@ -1,8 +1,10 @@
 flask
 torch
 faster_whisper
-pert
+peft
 pyaudio
 transformers
 huggingface_hub
+bitsandbytes
+
 
