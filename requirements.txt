@@ -1,10 +1,13 @@
 flask
 torch
+pandas
 faster_whisper
 peft
 pyaudio
 transformers
 huggingface_hub
 bitsandbytes
+
+
 
 
